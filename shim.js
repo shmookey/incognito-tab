@@ -9,13 +9,11 @@ let FakeStorage = () =>
   })
 
 function replaceStorage() {
-  console.log("[INCOGNITO-TAB] window.localStorage:", window.localStorage)
-  Object.defineProperty(window, "localStorage", 
-    { value: FakeStorage()
-    , configurable: false
-    , writable: false })
-  console.log("[INCOGNITO-TAB] window.localStorage:", window.localStorage)
+  let elem = document.createElement("script")
+  elem.type = "text/javascript"
+  elem.innerHTML = 'Object.defineProperty(window, "localStorage", { value: {}, configurable: false, writable: false })'
+  document.getElementsByTagName("head")[0].appendChild(elem)
 }
 
-replaceStorage()
+window.addEventListener('DOMContentLoaded', () => replaceStorage())
 
