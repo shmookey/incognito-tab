@@ -1,17 +1,18 @@
 const
 
-    menuItem =
+    tabItem =
       { id:       "incognito-tab"
       , title:    "Open in incognito tab"
       , contexts: ["link"]
       }
 
-  , menuCreateCallback = () => 
-      browser.runtime.lastError 
-      ? console.log("Error adding context menu item:", browser.runtime.lastError)
-      : console.log("Context menu item added successfully.")
+  , refreshItem =
+      { id:       "incognito-refresh"
+      , title:    "Incognito refresh"
+      , contexts: ["all"]
+      }
 
-  , onClick = async (info, tab) => {
+  , tabOnClick = async (info, tab) => {
       const thisTab = await browser.tabs.query(
         { active:        true
         , currentWindow: true })
@@ -24,9 +25,41 @@ const
         , runAt:         "document_start" }) 
     }
 
-  ;
+  , refreshOnClick = async (info, tab) => {
+      const thisTab = await browser.tabs.query(
+        { active:        true
+        , currentWindow: true })
+      const newTab  = await browser.tabs.create(
+        { url:           tab.url
+        , index:         thisTab[0].index + 1 })
+      browser.tabs.executeScript(
+        { allFrames:     true
+        , file:          "/shim.js"
+        , runAt:         "document_start" })
+      await browser.tabs.remove(tab.id)
+    }
 
-console.log("Attemtping to addd context menu item.")
-browser.contextMenus.create(menuItem, menuCreateCallback)
+  , onClick = async (info, tab) => {
+      if(info.menuItemId == "incognito-tab")
+        await tabOnClick(info,tab)
+      else if(info.menuItemId == "incognito-refresh")
+        await refreshOnClick(info,tab)
+    }
+
+  , createCallback = item => () => 
+      browser.runtime.lastError 
+      ? console.log("Error adding item", item, ":", browser.runtime.lastError)
+      : console.log("Context menu item added successfully.")
+
+  , sleep = t => new Promise(r => window.setTimeout(r, t))
+
+;
+
+console.log("Attemtping to addd context menu item: incognito-tab.")
+browser.contextMenus.create(tabItem, createCallback("incognito-tab"))
+
+console.log("Attemtping to addd context menu item: incognito-refresh.")
+browser.contextMenus.create(refreshItem, createCallback("incognito-refresh"))
+
 browser.contextMenus.onClicked.addListener(onClick)
 

@@ -21,10 +21,12 @@ mockStorage = `
   )
 `
 
-window.addEventListener('DOMContentLoaded', () => {
+let replaceStorage = () => {
   let elem = document.createElement("script")
   elem.type = "text/javascript"
   elem.innerHTML = mockStorage
   document.getElementsByTagName("head")[0].appendChild(elem)
-})
+}
+
+window.addEventListener('DOMContentLoaded', replaceStorage)
 
