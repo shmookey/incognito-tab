@@ -4,12 +4,13 @@
 , "version":     "0.1"
 , "description": "Open or refresh a tab with no cookies or local storage."
 , "permissions": ["contextMenus", "tabs", "cookies", "<all_urls>"]
+, "background":  {"scripts": ["background.js"]}
 , "icons": 
-  { "48": "icons/incognito-tab-48.png" }
-, "background":
-  { "scripts": ["background.js"] }
+  { "48":  "icons/incognito-tab-48.png"
+  , "128": "icons/incognito-tab-128.png"
+  }
 , "applications":
-  { "gecko": 
+  { "gecko":
     { "id":                 "incognito.tab@shmookey.net"
     , "strict_min_version": "60.0"
     } 
