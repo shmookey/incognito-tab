@@ -1,0 +1,19 @@
+{ "manifest_version": 2
+
+, "name":        "Open in incognito tab"
+, "version":     "0.1"
+, "description": "Open or refresh a tab with no cookies or local storage."
+, "permissions": ["contextMenus", "tabs", "cookies", "<all_urls>"]
+, "icons": 
+  { "48": "icons/incognito-tab-48.png" }
+, "background":
+  { "scripts": ["background.js"] }
+, "applications":
+  { "gecko": 
+    { "id":                 "incognito.tab@shmookey.net"
+    , "strict_min_version": "60.0"
+    } 
+  }
+}
+
+
